@@ -28,9 +28,8 @@ public class ScannerManager {
                 System.out.println("Вы хотите ввести данные с клавиатуры или из файла? (k/f)");
                 String ans = scanner.nextLine().trim();
                 switch (ans) {
-                    case "" -> {
+                    case "" ->
                         throw new NullPointerException();
-                    }
                     case "k" -> {
                         flag = true;
                         return true;
@@ -53,12 +52,12 @@ public class ScannerManager {
         boolean flag = false;
         while(!flag) {
             try {
-                System.out.println("Нужно выводить результат каждой итерации решения? (y/n)");
+                System.out.print("Нужно выводить результат каждой итерации решения? (y/n)");
                 String ans = scanner.nextLine().trim();
+                if(fileMode) System.out.println(ans);
                 switch (ans) {
-                    case "" -> {
+                    case "" ->
                         throw new NullPointerException();
-                    }
                     case "y" -> {
                         flag = true;
                         return true;
@@ -71,6 +70,7 @@ public class ScannerManager {
                 }
             } catch (IncorrectValueException | NullPointerException e){
                 System.out.println("Ответ должен быть \"y\" или \"n\"");
+                if(fileMode) errorEnd();
             }
         }
         return flag;
@@ -82,8 +82,7 @@ public class ScannerManager {
     }
 
     public Scanner sayNewScanner(){
-        String sFile = null;
-//        File file = null;
+        String sFile;
         Scanner scanner1 = null;
         while(scanner1 == null){
             try{
@@ -117,10 +116,13 @@ public class ScannerManager {
                 if(num < 0.000001 || num > 1) throw new IncorrectValueException();
             } catch (IncorrectValueException e){
                 System.out.println("Значение точности должно быть положительным числом из промежутка [0.000001; 1]");
+                if(fileMode) errorEnd();
             } catch (NullPointerException e){
                 System.out.println("Значение точности не может быть пустым");
+                if(fileMode) errorEnd();
             }   catch (NumberFormatException e){
                 System.out.println("Количество итераций должно быть числом");
+                if(fileMode) errorEnd();
             }
         }
         return num;
@@ -139,10 +141,13 @@ public class ScannerManager {
                 if(num <= 0) throw new IncorrectValueException();
             } catch (IncorrectValueException e){
                 System.out.println("Значение количества итераций должно быть положительным");
+                if(fileMode) errorEnd();
             } catch (NullPointerException e){
                 System.out.println("Количество итераций не может быть пустым");
+                if(fileMode) errorEnd();
             }  catch (NumberFormatException e){
                 System.out.println("Количество итераций должно быть целым числом");
+                if(fileMode) errorEnd();
             }
         }
         return num;
@@ -161,10 +166,13 @@ public class ScannerManager {
                 if(num <= 0 || num > 20) throw new IncorrectValueException();
             } catch (IncorrectValueException e){
                 System.out.println("Значение размерности должно быть положительным и не больше 20");
+                if(fileMode) errorEnd();
             } catch (NullPointerException e){
                 System.out.println("Значение размерности не может быть пустым");
+                if(fileMode) errorEnd();
             } catch (NumberFormatException e){
                 System.out.println("Значение размерности должно быть целым числом");
+                if(fileMode) errorEnd();
             }
         }
         return num;
@@ -182,9 +190,11 @@ public class ScannerManager {
                 num = Double.valueOf(sNum);
             } catch (NullPointerException e){
                 System.out.println("Коэфициент не может быть пустым");
+                if(fileMode) errorEnd();
             } catch (NumberFormatException e){
                 num = null;
                 System.out.println("Коэфициент должен быть числом");
+                if(fileMode) errorEnd();
             }
         }
         return num;
@@ -196,7 +206,6 @@ public class ScannerManager {
         double[] bi = new double[n];
         for (int i = 0; i < n; i++){
             bi[i] = sayDoubleNumber();
-//            if(fileMode) System.out.println(bi[i]);
         }
         return bi;
     }
@@ -219,12 +228,16 @@ public class ScannerManager {
                 } catch (NumberFormatException e){
                     System.out.println("Коэфициенты матрицы должны быть числами и их должно быть " + n);
                     flag = false;
+                    if(fileMode) errorEnd();
                 }
             }
         }
         return matrix;
     }
 
-
+    private void errorEnd(){
+        System.out.println("В файле неверные данные, программа завершена");
+        System.exit(0);
+    }
 
 }

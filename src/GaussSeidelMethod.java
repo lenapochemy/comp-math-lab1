@@ -27,7 +27,6 @@ public class GaussSeidelMethod {
         this.xik = new double[n];
         this.xik_next = new double[n];
         this.error_vector = new double[n];
-
     }
 
     public void solve(){
@@ -69,8 +68,8 @@ public class GaussSeidelMethod {
             if(endConditional()) {
                 System.out.println("СЛАУ решена!");
                 System.out.println("Решение: " + Arrays.toString(xik_next));
-                System.out.println("Количество итераций: " + (i + 1));
                 System.out.print("Вектор погрешностей: " + Arrays.toString(error_vector));
+                System.out.println("Количество итераций: " + (i + 1));
                 System.exit(0);
             } else {
                 if(outputMode) {
@@ -155,33 +154,6 @@ public class GaussSeidelMethod {
             System.out.println("Невозможно добиться диагонального преобладания в данной матрице");
             System.exit(0);
         }
-    }
-
-    private boolean checkMatrixNorm(double[][] matr){
-        double sum;
-        for (int i = 0; i < n; i++){
-            sum = 0;
-            for (int j = 0; j < n; j++){
-                sum += matr[i][j];
-            }
-            if(sum >= 1) return false;
-        }
-
-        for (int j = 0; j < n; j++){
-            sum = 0;
-            for (int i = 0; i < n; i++){
-                sum += matr[i][j];
-            }
-            if (sum >= 1) return false;
-        }
-
-        sum = 0;
-        for (int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                sum += matr[i][j] * matr[i][j];
-            }
-        }
-        return (Math.sqrt(sum) < 1);
     }
 
     //вернет true, если условие окончания выполняется и это была последняя итерация
