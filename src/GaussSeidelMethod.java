@@ -39,6 +39,11 @@ public class GaussSeidelMethod {
         for (int i = 0; i < n; i++){
             System.out.println(Arrays.toString(matrix[i]) + " * x = " + bi[i] );
         }
+        if(Det.determinant(matrix) == 0) {
+            System.out.println("Данная матрица имеет детерминант, равный нулю, " +
+                    "следовательно СЛАУ или не имеет решений, или имеет бесконечно много решений");
+            System.exit(0);
+        }
         System.out.println("-----------------------------------------");
         System.out.print("Проверяем диагональное преобладание: ");
         if(checkDiagonalDominance()) System.out.println("выполнено");
@@ -66,6 +71,9 @@ public class GaussSeidelMethod {
         }
         //первое приближение
         xik = di;
+//        for(int i = 0; i < n; i++){
+//            xik[i] = 1000;
+//        }
 
         if(outputMode) {
             System.out.print("Первое приближение:");
