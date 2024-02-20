@@ -9,6 +9,8 @@ public class GaussSeidelMethod {
     private final double[] bi;
     private double[] xik;
     private double[] xik_next;
+    private final double[] di;
+    private final double[][] cij;
     private final double eps;
     private final int m;
     private double[] error_vector;
@@ -27,6 +29,8 @@ public class GaussSeidelMethod {
         this.xik = new double[n];
         this.xik_next = new double[n];
         this.error_vector = new double[n];
+        this.di = new double[n];
+        this.cij = new double[n][n];
     }
 
     public void solve(){
@@ -49,10 +53,19 @@ public class GaussSeidelMethod {
         }
         System.out.println("-----------------------------------------");
 
-        //первое приближение
+
         for(int i = 0; i < n; i++){
-            xik[i] = bi[i] / matrix[i][i];
+            di[i] = bi[i] / matrix[i][i];
         }
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(i == j) cij[i][j] = 0;
+                else cij[i][j] = - matrix[i][j] / matrix[i][i];
+            }
+        }
+        //первое приближение
+        xik = di;
 
         if(outputMode) {
             System.out.print("Первое приближение:");
@@ -68,7 +81,7 @@ public class GaussSeidelMethod {
             if(endConditional()) {
                 System.out.println("СЛАУ решена!");
                 System.out.println("Решение: " + Arrays.toString(xik_next));
-                System.out.print("Вектор погрешностей: " + Arrays.toString(error_vector));
+                System.out.println("Вектор погрешностей: " + Arrays.toString(error_vector));
                 System.out.println("Количество итераций: " + (i + 1));
                 System.exit(0);
             } else {
@@ -84,22 +97,20 @@ public class GaussSeidelMethod {
         }
 
         System.out.println("За данное количество итераций решение СЛАУ не было найдено, вожможно уравнение расходится и решений вообще нет");
-        
 
     }
 
     private void iteration(){
         for(int i = 0; i < n; i++){
             double sum1 = 0, sum2 = 0;
+            xik_next[i] = di[i];
             for(int j = 0; j < i ; j++){
-                sum1 += (matrix[i][j] / matrix[i][i]) * xik_next[j];
+                xik_next[i] += cij[i][j] * xik_next[j];
             }
             for(int j = i + 1; j < n; j++){
-                sum2 += (matrix[i][j] / matrix[i][i]) * xik[j];
+                xik_next[i] += cij[i][j] * xik[j];
             }
-            xik_next[i] = ( bi[i] / matrix[i][i] ) - sum1 - sum2;
 //            xik_next[i] = rounding(xik_next[i]);
-
         }
     }
 
